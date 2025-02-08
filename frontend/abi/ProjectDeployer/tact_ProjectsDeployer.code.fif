@@ -1,0 +1,1246 @@
+PROGRAM{
+  DECLPROC __tact_verify_address
+  DECLPROC __tact_load_address
+  DECLPROC __tact_store_address
+  DECLPROC __tact_create_address
+  DECLPROC __tact_compute_contract_address
+  DECLPROC __tact_not_null
+  DECLPROC __tact_context_get
+  DECLPROC __tact_context_get_sender
+  DECLPROC __tact_store_bool
+  DECLPROC __tact_dict_get_int_int
+  DECLPROC __tact_slice_eq_bits
+  DECLPROC __tact_dict_set_code
+  DECLPROC __tact_dict_get_code
+  DECLPROC $Deploy$_load
+  DECLPROC $DeployOk$_store
+  DECLPROC $DeployOk$_store_cell
+  DECLPROC $Data$_store
+  DECLPROC $Data$_load
+  DECLPROC $DeployDonation$_store
+  DECLPROC $DeployDonation$_store_cell
+  DECLPROC $NewProject$_store
+  DECLPROC $NewProject$_store_cell
+  DECLPROC $NewDonation$_store
+  DECLPROC $NewDonation$_store_cell
+  DECLPROC $ChangeOwner$_load
+  DECLPROC $ChangeActive$_store
+  DECLPROC $ChangeActive$_store_cell
+  DECLPROC $ChangeActive$_load
+  DECLPROC $ChangePrice$_load
+  DECLPROC $Withdraw$_load
+  DECLPROC $StageManage$_load
+  DECLPROC $ActiveManage$_load
+  DECLPROC $CreateProject$_load
+  DECLPROC $CreateDonation$_load
+  DECLPROC $DeployProject$_store
+  DECLPROC $DeployProject$_store_cell
+  DECLPROC $ChangeStage$_store
+  DECLPROC $ChangeStage$_store_cell
+  DECLPROC $ProjectsDeployer$_store
+  DECLPROC $ProjectsDeployer$_load
+  DECLPROC $StateInit$_not_null
+  DECLPROC $Context$_get_value
+  DECLPROC $DeployerData$_to_external
+  DECLPROC $Project$init$_store
+  DECLPROC $Donation$init$_store
+  DECLPROC $ProjectsDeployer$_contract_init
+  DECLPROC $ProjectsDeployer$_contract_load
+  DECLPROC $ProjectsDeployer$_contract_store
+  DECLPROC $global_contractAddress
+  DECLPROC $global_send
+  DECLPROC $global_emit
+  DECLPROC $Context$_fun_readForwardFee
+  DECLPROC $Project$_init_child
+  DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+  DECLPROC $Donation$_init_child
+  DECLPROC $DeployerData$_constructor_owner_projectId_donationId_projectPrice_master_balance
+  DECLPROC $ProjectsDeployer$_fun_data
+  DECLPROC $ProjectsDeployer$_fun_projectAddress
+  DECLPROC $ProjectsDeployer$_fun_donationAddress
+  DECLPROC $ProjectsDeployer$_fun_forward
+  DECLPROC $ProjectsDeployer$_fun_notify
+  DECLPROC $SendParameters$_constructor_to_value_mode
+  DECLPROC $SendParameters$_constructor_to_value_mode_body_data_code
+  DECLPROC $ChangeStage$_constructor_stage
+  DECLPROC $ChangeActive$_constructor_active
+  DECLPROC $NewProject$_constructor_address_id_data_owner_required_percents
+  DECLPROC $DeployProject$_constructor_owner_data_required_percents
+  DECLPROC $NewDonation$_constructor_address_id_owner_data
+  DECLPROC $DeployDonation$_constructor_owner_data
+  DECLPROC $DeployOk$_constructor_queryId
+  DECLPROC %$ProjectsDeployer$_internal_empty
+  DECLPROC $ProjectsDeployer$_internal_binary_ChangeOwner
+  DECLPROC $ProjectsDeployer$_internal_binary_ChangePrice
+  DECLPROC $ProjectsDeployer$_internal_binary_ChangeActive
+  DECLPROC $ProjectsDeployer$_internal_binary_Withdraw
+  DECLPROC $ProjectsDeployer$_internal_binary_StageManage
+  DECLPROC $ProjectsDeployer$_internal_binary_ActiveManage
+  DECLPROC $ProjectsDeployer$_internal_binary_CreateProject
+  DECLPROC $ProjectsDeployer$_internal_binary_CreateDonation
+  DECLPROC $ProjectsDeployer$_internal_binary_Deploy
+  100194 DECLMETHOD %data
+  87085 DECLMETHOD %projectAddress
+  120108 DECLMETHOD %donationAddress
+  115390 DECLMETHOD lazy_deployment_completed
+  DECLPROC $ProjectsDeployer$_contract_router_internal
+  DECLPROC recv_internal
+  DECLGLOBVAR __tact_context
+  DECLGLOBVAR __tact_context_sender
+  DECLGLOBVAR __tact_context_sys
+  DECLGLOBVAR __tact_randomized
+  __tact_verify_address PROCINLINE:<{
+    DUP
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    DUP
+    11 PLDU
+    DUP
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+  }>
+  __tact_load_address PROCINLINE:<{
+    LDMSGADDR
+    SWAP
+    __tact_verify_address INLINECALLDICT
+  }>
+  __tact_store_address PROCINLINE:<{
+    __tact_verify_address INLINECALLDICT
+    STSLICER
+  }>
+  __tact_create_address PROCINLINE:<{
+    NEWC
+    2 PUSHINT
+    SWAP
+    2 STU
+    0 PUSHINT
+    SWAP
+    1 STU
+    s1 s2 XCHG
+    8 STI
+    256 STU
+    ENDC
+    CTOS
+    __tact_verify_address INLINECALLDICT
+  }>
+  __tact_compute_contract_address PROCINLINE:<{
+    NEWC
+    0 PUSHINT
+    SWAP
+    2 STU
+    3 PUSHINT
+    SWAP
+    2 STU
+    0 PUSHINT
+    SWAP
+    1 STU
+    s1 s2 XCHG
+    STREF
+    STREF
+    ENDC
+    HASHCU
+    __tact_create_address INLINECALLDICT
+  }>
+  __tact_not_null PROCINLINE:<{
+    DUP
+    ISNULL
+    128 THROWIF
+  }>
+  __tact_context_get PROCINLINE:<{
+    __tact_context GETGLOB
+    4 UNTUPLE
+  }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
+  __tact_store_bool PROCINLINE:<{
+    SWAP
+    1 STI
+  }>
+  __tact_dict_get_int_int PROCINLINE:<{
+    s1 s3 s3 XCHG3
+    DICTIGET
+    NULLSWAPIFNOT
+    IF:<{
+      SWAP
+      LDIX
+      DROP
+    }>ELSE<{
+      2DROP
+      PUSHNULL
+    }>
+  }>
+  __tact_slice_eq_bits PROCINLINE:<{
+    SDEQ
+  }>
+  __tact_dict_set_code PROCINLINE:<{
+    s0 s2 XCHG
+    16 PUSHINT
+    DICTUSETREF
+  }>
+  __tact_dict_get_code PROCINLINE:<{
+    SWAP
+    16 PUSHINT
+    DICTUGETREF
+    NULLSWAPIFNOT
+    135 THROWIFNOT
+  }>
+  $Deploy$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2490013878 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $DeployOk$_store PROCINLINE:<{
+    2952335191 PUSHINT
+    ROT
+    32 STU
+    64 STU
+  }>
+  $DeployOk$_store_cell PROCINLINE:<{
+    NEWC
+    SWAP
+    $DeployOk$_store INLINECALLDICT
+    ENDC
+  }>
+  $Data$_store PROCINLINE:<{
+    NEWC
+    s0 s4 XCHG2
+    STSLICER
+    ENDC
+    s0 s4 XCHG2
+    STREF
+    NEWC
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+    NEWC
+    NEWC
+    s0 s4 XCHG2
+    STSLICER
+    ENDC
+    s0 s3 XCHG2
+    STREF
+    NEWC
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+    ENDC
+    SWAP
+    STREF
+  }>
+  $Data$_load PROCINLINE:<{
+    LDREF
+    SWAP
+    CTOS
+    SWAP
+    LDREF
+    SWAP
+    CTOS
+    SWAP
+    LDREF
+    SWAP
+    CTOS
+    LDREF
+    SWAP
+    CTOS
+    SWAP
+    LDREF
+    DROP
+    CTOS
+    s2 s4 XCHG
+    s2 s3 XCHG
+  }>
+  $DeployDonation$_store PROCINLINE:<{
+    4017052970 PUSHINT
+    s0 s6 XCHG2
+    32 STU
+    4 -ROLL
+    $Data$_store INLINECALLDICT
+    SWAP
+    __tact_store_address INLINECALLDICT
+  }>
+  $DeployDonation$_store_cell PROCINLINE:<{
+    NEWC
+    5 -ROLL
+    $DeployDonation$_store INLINECALLDICT
+    ENDC
+  }>
+  $NewProject$_store PROCREF:<{
+    1463093253 PUSHINT
+    s0 s10 XCHG2
+    32 STU
+    s0 s8 XCHG2
+    __tact_store_address INLINECALLDICT
+    s1 s6 XCHG
+    64 STU
+    NEWC
+    4 2 BLKSWAP
+    $Data$_store INLINECALLDICT
+    ROT
+    __tact_store_address INLINECALLDICT
+    ROT
+    STVARUINT16
+    s1 s2 XCHG
+    STDICT
+    ENDC
+    SWAP
+    STREF
+  }>
+  $NewProject$_store_cell PROCINLINE:<{
+    NEWC
+    9 -ROLL
+    $NewProject$_store INLINECALLDICT
+    ENDC
+  }>
+  $NewDonation$_store PROCINLINE:<{
+    3359593827 PUSHINT
+    s0 s8 XCHG2
+    32 STU
+    s0 s6 XCHG2
+    __tact_store_address INLINECALLDICT
+    s1 s4 XCHG
+    64 STU
+    ROT
+    __tact_store_address INLINECALLDICT
+    s3 s4 XCHG2
+    $Data$_store INLINECALLDICT
+  }>
+  $NewDonation$_store_cell PROCINLINE:<{
+    NEWC
+    7 -ROLL
+    $NewDonation$_store INLINECALLDICT
+    ENDC
+  }>
+  $ChangeOwner$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2242002949 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
+  }>
+  $ChangeActive$_store PROCINLINE:<{
+    1103353291 PUSHINT
+    ROT
+    32 STU
+    1 STI
+  }>
+  $ChangeActive$_store_cell PROCINLINE:<{
+    NEWC
+    SWAP
+    $ChangeActive$_store INLINECALLDICT
+    ENDC
+  }>
+  $ChangeActive$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1103353291 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    1 LDI
+    SWAP
+  }>
+  $ChangePrice$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3582265868 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDVARUINT16
+    SWAP
+  }>
+  $Withdraw$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1239257369 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $StageManage$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1504448527 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    8 LDU
+    -ROT
+  }>
+  $ActiveManage$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1639986858 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    1 LDI
+    64 LDU
+    -ROT
+  }>
+  $CreateProject$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1719684186 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDREF
+    SWAP
+    CTOS
+    $Data$_load INLINECALLDICT
+    s0 s4 XCHG
+    LDVARUINT16
+    LDDICT
+    __tact_load_address INLINECALLDICT
+    NIP
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+  }>
+  $CreateDonation$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3989847898 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    $Data$_load INLINECALLDICT
+    s0 s4 XCHG
+    __tact_load_address INLINECALLDICT
+    s1 s5 XCHG
+  }>
+  $DeployProject$_store PROCINLINE:<{
+    11469140 PUSHINT
+    s0 s8 XCHG2
+    32 STU
+    NEWC
+    4 4 BLKSWAP
+    $Data$_store INLINECALLDICT
+    s0 s3 XCHG2
+    STVARUINT16
+    STDICT
+    ROT
+    __tact_store_address INLINECALLDICT
+    ENDC
+    SWAP
+    STREF
+  }>
+  $DeployProject$_store_cell PROCINLINE:<{
+    NEWC
+    7 -ROLL
+    $DeployProject$_store INLINECALLDICT
+    ENDC
+  }>
+  $ChangeStage$_store PROCINLINE:<{
+    581252563 PUSHINT
+    ROT
+    32 STU
+    8 STU
+  }>
+  $ChangeStage$_store_cell PROCINLINE:<{
+    NEWC
+    SWAP
+    $ChangeStage$_store INLINECALLDICT
+    ENDC
+  }>
+  $ProjectsDeployer$_store PROCINLINE:<{
+    s4 s5 XCHG2
+    64 STU
+    s1 s2 XCHG
+    64 STU
+    SWAP
+    __tact_store_address INLINECALLDICT
+    1 STI
+    SWAP
+    STVARUINT16
+  }>
+  $ProjectsDeployer$_load PROCINLINE:<{
+    64 LDU
+    64 LDU
+    __tact_load_address INLINECALLDICT
+    SWAP
+    1 LDI
+    LDVARUINT16
+    5 -ROLL
+  }>
+  $StateInit$_not_null PROCINLINE:<{
+    DUP
+    ISNULL
+    128 THROWIF
+        2 UNTUPLE
+  }>
+  $Context$_get_value PROCINLINE:<{
+    s1 s3 XCHG
+    3 BLKDROP
+  }>
+  $DeployerData$_to_external PROCINLINE:<{
+  }>
+  $Project$init$_store PROCINLINE:<{
+    -ROT
+    __tact_store_address INLINECALLDICT
+    257 PUSHINT
+    STIX
+  }>
+  $Donation$init$_store PROCINLINE:<{
+    -ROT
+    __tact_store_address INLINECALLDICT
+    257 PUSHINT
+    STIX
+  }>
+  $ProjectsDeployer$_contract_init PROCREF:<{
+    0 PUSHINT
+    DUP
+    TRUE
+    OVER
+    __tact_context_get_sender INLINECALLDICT
+    -ROT
+  }>
+  $ProjectsDeployer$_contract_load PROCREF:<{
+    c4 PUSH
+    CTOS
+    LDREF
+    SWAP
+    __tact_context_sys SETGLOB
+    1 LDI
+    SWAP
+    IFJMP:<{
+      $ProjectsDeployer$_load INLINECALLDICT
+      1 5 BLKDROP2
+    }>
+    DROP
+    MYADDR
+    11 PLDU
+    10 PUSHPOW2
+    EQUAL
+    137 THROWIFNOT
+    $ProjectsDeployer$_contract_init INLINECALLDICT
+  }>
+  $ProjectsDeployer$_contract_store PROCINLINE:<{
+    NEWC
+    __tact_context_sys GETGLOB
+    SWAP
+    STREF
+    TRUE
+    SWAP
+    1 STI
+    5 -ROLL
+    $ProjectsDeployer$_store INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  $global_contractAddress PROCINLINE:<{
+    0 PUSHINT
+    -ROT
+    __tact_compute_contract_address INLINECALLDICT
+  }>
+  $global_send PROCREF:<{
+        NEWC
+    1 PUSHINT
+    SWAP
+    2 STI
+    s0 s7 XCHG2
+    __tact_store_bool INLINECALLDICT
+    0 PUSHINT
+    SWAP
+    3 STI
+    s0 s5 XCHG2
+    __tact_store_address INLINECALLDICT
+    s0 s3 XCHG2
+        STVARUINT16
+    0 PUSHINT
+    SWAP
+    105 STI
+    s3 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+    }>ELSE<{
+      s4 PUSH
+      ISNULL
+      NOT
+    }>
+    IF:<{
+      TRUE
+      __tact_store_bool INLINECALLDICT
+          NEWC
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      s4 PUSH
+      ISNULL
+      NOT
+      IF:<{
+        TRUE
+        __tact_store_bool INLINECALLDICT
+        s0 s4 XCHG
+        __tact_not_null INLINECALLDICT
+        s0 s4 XCHG2
+            STREF
+      }>ELSE<{
+        s4 POP
+        s0 s3 XCHG
+        FALSE
+        __tact_store_bool INLINECALLDICT
+      }>
+      s4 PUSH
+      ISNULL
+      NOT
+      IF:<{
+        TRUE
+        __tact_store_bool INLINECALLDICT
+        s0 s4 XCHG
+        __tact_not_null INLINECALLDICT
+        s0 s4 XCHG2
+            STREF
+      }>ELSE<{
+        s4 POP
+        s0 s3 XCHG
+        FALSE
+        __tact_store_bool INLINECALLDICT
+      }>
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      s0 s2 XCHG
+      TRUE
+      __tact_store_bool INLINECALLDICT
+      s0 s2 XCHG
+          ENDC
+      ROT
+          STREF
+    }>ELSE<{
+      s3 POP
+      s3 POP
+      SWAP
+      FALSE
+      __tact_store_bool INLINECALLDICT
+    }>
+    OVER
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      __tact_store_bool INLINECALLDICT
+      SWAP
+      __tact_not_null INLINECALLDICT
+      SWAP
+          STREF
+    }>ELSE<{
+      NIP
+      FALSE
+      __tact_store_bool INLINECALLDICT
+    }>
+        ENDC
+    SWAP
+        SENDMSG
+  }>
+  $global_emit PROCINLINE:<{
+        NEWC
+    15211807202738752817960438464513 PUSHINT
+    SWAP
+    104 STU
+        STREF
+        ENDC
+    0 PUSHINT
+        SENDRAWMSG
+  }>
+  $Context$_fun_readForwardFee PROCREF:<{
+    3 1 BLKDROP2
+    __tact_load_address INLINECALLDICT
+    DROP
+        LDVARUINT16
+    NIP
+    1 PUSHINT
+        SDSKIPFIRST
+        LDVARUINT16
+    NIP
+        LDVARUINT16
+    DROP
+    3 MULCONST
+    1 RSHIFT#
+  }>
+  $Project$_init_child PROCREF:<{
+    s0 s2 XCHG
+    CTOS
+    LDDICT
+    DROP
+    NEWDICT
+    OVER
+    31206 PUSHINT
+    __tact_dict_get_code INLINECALLDICT
+    SWAP
+    31206 PUSHINT
+    s2 PUSH
+    __tact_dict_set_code INLINECALLDICT
+    s0 s2 XCHG
+    10761 PUSHINT
+    __tact_dict_get_code INLINECALLDICT
+    s1 s2 XCHG
+    10761 PUSHINT
+    SWAP
+    __tact_dict_set_code INLINECALLDICT
+    NEWC
+    SWAP
+    NEWC
+    STDICT
+    ENDC
+    SWAP
+    STREF
+    FALSE
+    SWAP
+    1 STI
+    s0 s0 s3 XCHG3
+    $Project$init$_store INLINECALLDICT
+    ENDC
+  }>
+  $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
+  }>
+  $Donation$_init_child PROCREF:<{
+    s0 s2 XCHG
+    CTOS
+    LDDICT
+    DROP
+    NEWDICT
+    SWAP
+    46970 PUSHINT
+    __tact_dict_get_code INLINECALLDICT
+    SWAP
+    46970 PUSHINT
+    s2 PUSH
+    __tact_dict_set_code INLINECALLDICT
+    NEWC
+    SWAP
+    NEWC
+    STDICT
+    ENDC
+    SWAP
+    STREF
+    FALSE
+    SWAP
+    1 STI
+    s0 s0 s3 XCHG3
+    $Donation$init$_store INLINECALLDICT
+    ENDC
+  }>
+  $DeployerData$_constructor_owner_projectId_donationId_projectPrice_master_balance PROCINLINE:<{
+    SWAP
+  }>
+  $ProjectsDeployer$_fun_data PROCREF:<{
+        B{b5ee9c72410101010024000043800eccf90a15cccffb582a7f018db440b3df02b4bcbb105b9d822091b618b0de4b30e7777fd8} B>boc <s PUSHSLICE
+        BALANCE FIRST
+    s4 PUSH
+    s7 s2 s(-1) PUXC2
+    s7 PUSH
+    s5 s2 s(-1) PUXC2
+    $DeployerData$_constructor_owner_projectId_donationId_projectPrice_master_balance INLINECALLDICT
+  }>
+  $ProjectsDeployer$_fun_projectAddress PROCREF:<{
+    __tact_context_sys GETGLOB
+        MYADDR
+    ROT
+    $Project$_init_child INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
+  $ProjectsDeployer$_fun_donationAddress PROCREF:<{
+    __tact_context_sys GETGLOB
+        MYADDR
+    ROT
+    $Donation$_init_child INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
+  $ProjectsDeployer$_fun_forward PROCREF:<{
+    PUSHNULL
+    PUSHNULL
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      2DROP
+      $StateInit$_not_null INLINECALLDICT
+      SWAP
+    }>ELSE<{
+      s2 POP
+    }>
+    s2 s4 XCHG
+    0 PUSHINT
+    s0 s3 XCHG
+    s0 s4 XCHG
+    66 PUSHINT
+    s2 s3 XCHG2
+    $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_fun_notify PROCINLINE:<{
+    __tact_context_get_sender INLINECALLDICT
+    SWAP
+    FALSE
+    PUSHNULL
+    $ProjectsDeployer$_fun_forward INLINECALLDICT
+  }>
+  $SendParameters$_constructor_to_value_mode PROCINLINE:<{
+    TRUE
+    3 -ROLL
+    PUSHNULL
+    PUSHNULL
+    PUSHNULL
+  }>
+  $SendParameters$_constructor_to_value_mode_body_data_code PROCINLINE:<{
+    TRUE
+    s0 s6 XCHG
+    s0 s5 XCHG
+    s0 s4 XCHG
+    s3 s1 s3 XCHG3
+  }>
+  $ChangeStage$_constructor_stage PROCINLINE:<{
+  }>
+  $ChangeActive$_constructor_active PROCINLINE:<{
+  }>
+  $NewProject$_constructor_address_id_data_owner_required_percents PROCINLINE:<{
+  }>
+  $DeployProject$_constructor_owner_data_required_percents PROCINLINE:<{
+    6 ROLL
+  }>
+  $NewDonation$_constructor_address_id_owner_data PROCINLINE:<{
+  }>
+  $DeployDonation$_constructor_owner_data PROCINLINE:<{
+    4 ROLL
+  }>
+  $DeployOk$_constructor_queryId PROCINLINE:<{
+  }>
+  %$ProjectsDeployer$_internal_empty PROCINLINE:<{
+  }>
+  $ProjectsDeployer$_internal_binary_ChangeOwner PROCINLINE:<{
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s1 s5 XCHG
+    __tact_slice_eq_bits INLINECALLDICT
+    s1 s4 XCHG
+    THROWANYIFNOT
+  }>
+  $ProjectsDeployer$_internal_binary_ChangePrice PROCINLINE:<{
+    NIP
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s4 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+  }>
+  $ProjectsDeployer$_internal_binary_ChangeActive PROCINLINE:<{
+    s2 POP
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s4 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+  }>
+  $ProjectsDeployer$_internal_binary_Withdraw PROCINLINE:<{
+    DROP
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s4 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+        BALANCE FIRST
+    100000000 PUSHINT
+    SUB
+    s3 s(-1) PUXC
+    1 PUSHINT
+    $SendParameters$_constructor_to_value_mode INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_internal_binary_StageManage PROCINLINE:<{
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s6 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+    __tact_context_sys GETGLOB
+        MYADDR
+    3 ROLL
+    $Project$_init_child INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    0 PUSHINT
+    64 PUSHINT
+    s0 s5 XCHG
+    $ChangeStage$_constructor_stage INLINECALLDICT
+    $ChangeStage$_store_cell INLINECALLDICT
+    s0 s1 s5 XCHG3
+    s3 s3 XCHG2
+    s0 s4 XCHG
+    $SendParameters$_constructor_to_value_mode_body_data_code INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_internal_binary_ActiveManage PROCINLINE:<{
+    56837 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s6 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+    __tact_context_sys GETGLOB
+        MYADDR
+    ROT
+    $Donation$_init_child INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    0 PUSHINT
+    64 PUSHINT
+    s0 s5 XCHG
+    $ChangeActive$_constructor_active INLINECALLDICT
+    $ChangeActive$_store_cell INLINECALLDICT
+    s0 s1 s5 XCHG3
+    s3 s3 XCHG2
+    s0 s4 XCHG
+    $SendParameters$_constructor_to_value_mode_body_data_code INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_internal_binary_CreateProject PROCINLINE:<{
+    61530 PUSHINT
+    s9 PUSH
+    THROWANYIFNOT
+    48540 PUSHINT
+    __tact_context_get INLINECALLDICT
+    $Context$_get_value INLINECALLDICT
+    __tact_context_get INLINECALLDICT
+    $Context$_fun_readForwardFee INLINECALLDICT
+    s10 s(-1) PUXC
+    ADD
+    200000000 PUSHINT
+    ADD
+    GREATER
+    THROWANYIFNOT
+    __tact_context_sys GETGLOB
+        MYADDR
+    s13 PUSH
+    $Project$_init_child INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    257 PUSHINT
+    s5 s(-1) s(-1) PUXCPU
+    0 PUSHINT
+    SWAP
+    __tact_dict_get_int_int INLINECALLDICT
+    __tact_not_null INLINECALLDICT
+    257 PUSHINT
+    s6 s(-1) s(-1) PUXCPU
+    1 PUSHINT
+    SWAP
+    __tact_dict_get_int_int INLINECALLDICT
+    __tact_not_null INLINECALLDICT
+    ADD
+    257 PUSHINT
+    s6 s(-1) s(-1) PUXCPU
+    2 PUSHINT
+    SWAP
+    __tact_dict_get_int_int INLINECALLDICT
+    __tact_not_null INLINECALLDICT
+    ADD
+    257 PUSHINT
+    s6 s(-1) s(-1) PUXCPU
+    3 PUSHINT
+    SWAP
+    __tact_dict_get_int_int INLINECALLDICT
+    __tact_not_null INLINECALLDICT
+    ADD
+    44024 PUSHINT
+    SWAP
+    100 EQINT
+    THROWANYIFNOT
+    44024 PUSHINT
+    257 PUSHINT
+    s6 s(-1) s(-1) PUXCPU
+    0 PUSHINT
+    SWAP
+    __tact_dict_get_int_int INLINECALLDICT
+    __tact_not_null INLINECALLDICT
+    0 GTINT
+    IF:<{
+      257 PUSHINT
+      s6 s(-1) s(-1) PUXCPU
+      1 PUSHINT
+      SWAP
+      __tact_dict_get_int_int INLINECALLDICT
+      __tact_not_null INLINECALLDICT
+      0 GTINT
+    }>ELSE<{
+      FALSE
+    }>
+    IF:<{
+      257 PUSHINT
+      s6 s(-1) s(-1) PUXCPU
+      2 PUSHINT
+      SWAP
+      __tact_dict_get_int_int INLINECALLDICT
+      __tact_not_null INLINECALLDICT
+      0 GTINT
+    }>ELSE<{
+      FALSE
+    }>
+    IF:<{
+      257 PUSHINT
+      s6 s(-1) s(-1) PUXCPU
+      3 PUSHINT
+      SWAP
+      __tact_dict_get_int_int INLINECALLDICT
+      __tact_not_null INLINECALLDICT
+      0 GTINT
+    }>ELSE<{
+      FALSE
+    }>
+    THROWANYIFNOT
+    s0 s14 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s9 s11 s10 PUSH3
+    $NewProject$_constructor_address_id_data_owner_required_percents INLINECALLDICT
+    $NewProject$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s0 s14 XCHG
+    INC
+    s3 s4 XCHG
+    s3 s9 XCHG
+    s8 s7 s0 XCHG3
+    200000000 PUSHINT
+    s7 s6 XCHG2
+    0 PUSHINT
+    s0 s11 XCHG
+    $DeployProject$_constructor_owner_data_required_percents INLINECALLDICT
+    $DeployProject$_store_cell INLINECALLDICT
+    s5 s10 XCHG
+    s1 s4 XCHG
+    s3 s10 XCHG
+    s0 s10 s10 XCHG3
+    $SendParameters$_constructor_to_value_mode_body_data_code INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_internal_binary_CreateDonation PROCINLINE:<{
+    61530 PUSHINT
+    s7 PUSH
+    THROWANYIFNOT
+    48540 PUSHINT
+    __tact_context_get INLINECALLDICT
+    $Context$_get_value INLINECALLDICT
+    __tact_context_get INLINECALLDICT
+    $Context$_fun_readForwardFee INLINECALLDICT
+    s8 s(-1) PUXC
+    ADD
+    GREATER
+    THROWANYIFNOT
+    __tact_context_sys GETGLOB
+        MYADDR
+    s10 PUSH
+    $Donation$_init_child INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    s0 s11 s3 PUSH3
+    s10 s9 s8 PUSH3
+    s10 PUSH
+    $NewDonation$_constructor_address_id_owner_data INLINECALLDICT
+    $NewDonation$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s0 s11 XCHG
+    INC
+    s3 s7 s0 XCHG3
+    200000000 PUSHINT
+    s7 s6 XCHG2
+    0 PUSHINT
+    s0 s6 XCHG
+    $DeployDonation$_constructor_owner_data INLINECALLDICT
+    $DeployDonation$_store_cell INLINECALLDICT
+    s5 s9 XCHG
+    s3 s4 XCHG
+    s0 s1 s3 XCHG3
+    s9 s9 XCHG2
+    $SendParameters$_constructor_to_value_mode_body_data_code INLINECALLDICT
+    $global_send INLINECALLDICT
+    DROP
+  }>
+  $ProjectsDeployer$_internal_binary_Deploy PROCINLINE:<{
+    $DeployOk$_constructor_queryId INLINECALLDICT
+    $DeployOk$_store_cell INLINECALLDICT
+    $ProjectsDeployer$_fun_notify INLINECALLDICT
+  }>
+  %data PROC:<{
+    $ProjectsDeployer$_contract_load INLINECALLDICT
+    $ProjectsDeployer$_fun_data INLINECALLDICT
+    5 6 BLKDROP2
+    $DeployerData$_to_external INLINECALLDICT
+  }>
+  %projectAddress PROC:<{
+    $ProjectsDeployer$_contract_load INLINECALLDICT
+    5 ROLL
+    $ProjectsDeployer$_fun_projectAddress INLINECALLDICT
+    5 1 BLKDROP2
+  }>
+  %donationAddress PROC:<{
+    $ProjectsDeployer$_contract_load INLINECALLDICT
+    5 ROLL
+    $ProjectsDeployer$_fun_donationAddress INLINECALLDICT
+    5 1 BLKDROP2
+  }>
+  lazy_deployment_completed PROC:<{
+    c4 PUSH
+    CTOS
+    1 LDI
+    SWAP
+  }>
+  $ProjectsDeployer$_contract_router_internal PROCREF:<{
+    SWAP
+    IFJMP:<{
+      DROP
+      TRUE
+    }>
+    0 PUSHINT
+    OVER
+    SBITS
+    31 GTINT
+    IF:<{
+      DROP
+      DUP
+      32 PLDU
+    }>
+    DUP
+    0 EQINT
+    s2 PUSH
+    SBITS
+    33 LESSINT
+    AND
+    IFJMP:<{
+      2DROP
+      %$ProjectsDeployer$_internal_empty INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    2242002949 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeOwner$_load INLINECALLDICT
+      NIP
+      $ProjectsDeployer$_internal_binary_ChangeOwner INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3582265868 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangePrice$_load INLINECALLDICT
+      NIP
+      $ProjectsDeployer$_internal_binary_ChangePrice INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1103353291 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeActive$_load INLINECALLDICT
+      NIP
+      $ProjectsDeployer$_internal_binary_ChangeActive INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1239257369 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $Withdraw$_load INLINECALLDICT
+      NIP
+      $ProjectsDeployer$_internal_binary_Withdraw INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1504448527 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $StageManage$_load INLINECALLDICT
+      1 2 BLKDROP2
+      $ProjectsDeployer$_internal_binary_StageManage INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1639986858 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ActiveManage$_load INLINECALLDICT
+      1 2 BLKDROP2
+      $ProjectsDeployer$_internal_binary_ActiveManage INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1719684186 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $CreateProject$_load INLINECALLDICT
+      1 7 BLKDROP2
+      $ProjectsDeployer$_internal_binary_CreateProject INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3989847898 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $CreateDonation$_load INLINECALLDICT
+      1 5 BLKDROP2
+      $ProjectsDeployer$_internal_binary_CreateDonation INLINECALLDICT
+      TRUE
+    }>
+    2490013878 PUSHINT
+    EQUAL
+    IFJMP:<{
+      $Deploy$_load INLINECALLDICT
+      NIP
+      $ProjectsDeployer$_internal_binary_Deploy INLINECALLDICT
+      TRUE
+    }>
+    DROP
+    FALSE
+  }>
+  recv_internal PROC:<{
+    SWAP
+    CTOS
+    4 LDU
+    SWAP
+    1 PUSHINT
+    AND
+    NEGATE
+    SWAP
+    LDMSGADDR
+    SWAP
+    __tact_verify_address INLINECALLDICT
+    s0 s4 s2 PUXCPU
+    s0 s3 XCHG
+    4 TUPLE
+    __tact_context SETGLOB
+    s0 s2 XCHG
+    __tact_context_sender SETGLOB
+    $ProjectsDeployer$_contract_load INLINECALLDICT
+    2 5 BLKSWAP
+    $ProjectsDeployer$_contract_router_internal INLINECALLDICT
+    130 THROWIFNOT
+    $ProjectsDeployer$_contract_store INLINECALLDICT
+  }>
+}END>c

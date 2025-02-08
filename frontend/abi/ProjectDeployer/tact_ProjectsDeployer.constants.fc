@@ -1,0 +1,4 @@
+;; EQB2Z8hQrmZ_2sFT-AxtogWe-BWl5diC3OwRBI2wxYbyWfZN
+slice __gen_slice_address_5f45e3ecf0a724d94ef8d1c710fa27693da01a43e205276deaa52922c154f0b2() asm """
+    B{b5ee9c72410101010024000043800eccf90a15cccffb582a7f018db440b3df02b4bcbb105b9d822091b618b0de4b30e7777fd8} B>boc <s PUSHSLICE
+""";

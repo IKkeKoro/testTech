@@ -1,0 +1,476 @@
+;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+_ $StateInit$_get_code((cell, cell) v) inline {
+    var (v'code, v'data) = v;
+    return v'code;
+}
+
+;;
+;; Type: Context
+;; TLB: _ bounced:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_sender((int, slice, int, slice) v) inline {
+    var (v'bounced, v'sender, v'value, v'raw) = v;
+    return v'sender;
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
+;;
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_bounce_body_data_code(slice $to, int $value, int $mode, int $bounce, cell $body, cell $data, cell $code) inline {
+    return ($bounce, $to, $value, $mode, $body, $code, $data);
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode(slice $to, int $value, int $mode) inline {
+    return (true, $to, $value, $mode, null(), null(), null());
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_bounce_body(slice $to, int $value, int $mode, int $bounce, cell $body) inline {
+    return ($bounce, $to, $value, $mode, $body, null(), null());
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_body(slice $to, int $value, int $mode, cell $body) inline {
+    return (true, $to, $value, $mode, $body, null(), null());
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_body_data_code(slice $to, int $value, int $mode, cell $body, cell $data, cell $code) inline {
+    return (true, $to, $value, $mode, $body, $code, $data);
+}
+
+;;
+;; Type: WalletData
+;; TLB: _ balance:int257 owner:address master:address code:^cell = WalletData
+;;
+
+(int, slice, slice, cell) $WalletData$_to_external(((int, slice, slice, cell)) v) inline {
+    var (v'balance, v'owner, v'master, v'code) = v; 
+    return (v'balance, v'owner, v'master, v'code);
+}
+
+((int, slice, slice, cell)) $WalletData$_constructor_balance_owner_master_code(int $balance, slice $owner, slice $master, cell $code) inline {
+    return ($balance, $owner, $master, $code);
+}
+
+;;
+;; Type: MemberData
+;; TLB: _ totalVoted:int257 lastClaimed:int257 subscribedUntil:int257 jettonsToClaim:int257 inviter:address poolWithdrawnAt:int257 = MemberData
+;;
+
+(int, int, int, int, slice, int) $MemberData$_to_external(((int, int, int, int, slice, int)) v) inline {
+    var (v'totalVoted, v'lastClaimed, v'subscribedUntil, v'jettonsToClaim, v'inviter, v'poolWithdrawnAt) = v; 
+    return (v'totalVoted, v'lastClaimed, v'subscribedUntil, v'jettonsToClaim, v'inviter, v'poolWithdrawnAt);
+}
+
+((int, int, int, int, slice, int)) $MemberData$_constructor_totalVoted_lastClaimed_subscribedUntil_jettonsToClaim_inviter_poolWithdrawnAt(int $totalVoted, int $lastClaimed, int $subscribedUntil, int $jettonsToClaim, slice $inviter, int $poolWithdrawnAt) inline {
+    return ($totalVoted, $lastClaimed, $subscribedUntil, $jettonsToClaim, $inviter, $poolWithdrawnAt);
+}
+
+;;
+;; Type: Transfer
+;; Header: 0x0f8a7ea5
+;; TLB: transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = Transfer
+;;
+
+(slice, ((int, int, slice, slice, cell, int, slice))) $Transfer$_load(slice sc_0) inline_ref {
+    throw_unless(129, sc_0~load_uint(32) == 260734629);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'destination = sc_0~__tact_load_address();
+    var v'response_destination = sc_0~__tact_load_address();
+    var v'custom_payload = sc_0~load_int(1) ? sc_0~load_ref() : null();
+    var v'forward_ton_amount = sc_0~load_coins();
+    var v'forward_payload = sc_0;
+    return (sc_0, (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload));
+}
+
+;;
+;; Type: RefIncome
+;; Header: 0x231735ec
+;; TLB: ref_income#231735ec amount:coins sender:address counter:uint8 income:coins = RefIncome
+;;
+
+builder $RefIncome$_store(builder build_0, (int, slice, int, int) v) inline {
+    var (v'amount, v'sender, v'counter, v'income) = v;
+    build_0 = store_uint(build_0, 588723692, 32);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'sender);
+    build_0 = build_0.store_uint(v'counter, 8);
+    build_0 = build_0.store_coins(v'income);
+    return build_0;
+}
+
+cell $RefIncome$_store_cell((int, slice, int, int) v) inline {
+    return $RefIncome$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((int, slice, int, int))) $RefIncome$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 588723692);
+    var v'amount = sc_0~load_coins();
+    var v'sender = sc_0~__tact_load_address();
+    var v'counter = sc_0~load_uint(8);
+    var v'income = sc_0~load_coins();
+    return (sc_0, (v'amount, v'sender, v'counter, v'income));
+}
+
+((int, slice, int, int)) $RefIncome$_constructor_income_sender_amount_counter(int $income, slice $sender, int $amount, int $counter) inline {
+    return ($amount, $sender, $counter, $income);
+}
+
+;;
+;; Type: AddVots
+;; Header: 0xeca2354f
+;; TLB: add_vots#eca2354f amount:coins = AddVots
+;;
+
+(slice, ((int))) $AddVots$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3970053455);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'amount));
+}
+
+;;
+;; Type: CheckSupply
+;; Header: 0x25ca1787
+;; TLB: check_supply#25ca1787 totalVoted:coins sender:address poolWithdrawnAt:coins = CheckSupply
+;;
+
+builder $CheckSupply$_store(builder build_0, (int, slice, int) v) inline {
+    var (v'totalVoted, v'sender, v'poolWithdrawnAt) = v;
+    build_0 = store_uint(build_0, 634001287, 32);
+    build_0 = build_0.store_coins(v'totalVoted);
+    build_0 = __tact_store_address(build_0, v'sender);
+    build_0 = build_0.store_coins(v'poolWithdrawnAt);
+    return build_0;
+}
+
+cell $CheckSupply$_store_cell((int, slice, int) v) inline {
+    return $CheckSupply$_store(begin_cell(), v).end_cell();
+}
+
+((int, slice, int)) $CheckSupply$_constructor_sender_poolWithdrawnAt_totalVoted(slice $sender, int $poolWithdrawnAt, int $totalVoted) inline {
+    return ($totalVoted, $sender, $poolWithdrawnAt);
+}
+
+;;
+;; Type: ClaimPool
+;; Header: 0x7b51153a
+;; TLB: claim_pool#7b51153a query_id:uint64 = ClaimPool
+;;
+
+(slice, ((int))) $ClaimPool$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2068911418);
+    var v'query_id = sc_0~load_uint(64);
+    return (sc_0, (v'query_id));
+}
+
+;;
+;; Type: ChangeInviter
+;; Header: 0x1714d5c6
+;; TLB: change_inviter#1714d5c6 inviter:address = ChangeInviter
+;;
+
+(slice, ((slice))) $ChangeInviter$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 387241414);
+    var v'inviter = sc_0~__tact_load_address();
+    return (sc_0, (v'inviter));
+}
+
+;;
+;; Type: Claim
+;; Header: 0xc392ec6b
+;; TLB: claim#c392ec6b query_id:uint64 = Claim
+;;
+
+(slice, ((int))) $Claim$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3281185899);
+    var v'query_id = sc_0~load_uint(64);
+    return (sc_0, (v'query_id));
+}
+
+;;
+;; Type: UpdateSubscribe
+;; Header: 0x965cf028
+;; TLB: update_subscribe#965cf028 jettons:int257 price:int257 = UpdateSubscribe
+;;
+
+(slice, ((int, int))) $UpdateSubscribe$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2522673192);
+    var v'jettons = sc_0~load_int(257);
+    var v'price = sc_0~load_int(257);
+    return (sc_0, (v'jettons, v'price));
+}
+
+;;
+;; Type: InternalTransfer
+;; Header: 0x178d4519
+;; TLB: internal_transfer#178d4519 query_id:uint64 amount:coins from:address response_destination:address forward_ton_amount:coins forward_payload:remainder<slice> = InternalTransfer
+;;
+
+builder $InternalTransfer$_store(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref {
+    var (v'query_id, v'amount, v'from, v'response_destination, v'forward_ton_amount, v'forward_payload) = v;
+    build_0 = store_uint(build_0, 395134233, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'from);
+    build_0 = __tact_store_address(build_0, v'response_destination);
+    build_0 = build_0.store_coins(v'forward_ton_amount);
+    build_0 = build_0.store_slice(v'forward_payload);
+    return build_0;
+}
+
+cell $InternalTransfer$_store_cell((int, int, slice, slice, int, slice) v) inline {
+    return $InternalTransfer$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((int, int, slice, slice, int, slice))) $InternalTransfer$_load(slice sc_0) inline_ref {
+    throw_unless(129, sc_0~load_uint(32) == 395134233);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'from = sc_0~__tact_load_address();
+    var v'response_destination = sc_0~__tact_load_address();
+    var v'forward_ton_amount = sc_0~load_coins();
+    var v'forward_payload = sc_0;
+    return (sc_0, (v'query_id, v'amount, v'from, v'response_destination, v'forward_ton_amount, v'forward_payload));
+}
+
+(slice, ((int, int))) $InternalTransfer$_load_bounced(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 395134233);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'query_id, v'amount));
+}
+
+((int, int, slice, slice, int, slice)) $InternalTransfer$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload(int $query_id, int $amount, slice $from, slice $response_destination, int $forward_ton_amount, slice $forward_payload) inline {
+    return ($query_id, $amount, $from, $response_destination, $forward_ton_amount, $forward_payload);
+}
+
+;;
+;; Type: TransferNotification
+;; Header: 0x7362d09c
+;; TLB: transfer_notification#7362d09c query_id:uint64 amount:coins sender:address forward_payload:remainder<slice> = TransferNotification
+;;
+
+builder $TransferNotification$_store(builder build_0, (int, int, slice, slice) v) inline {
+    var (v'query_id, v'amount, v'sender, v'forward_payload) = v;
+    build_0 = store_uint(build_0, 1935855772, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'sender);
+    build_0 = build_0.store_slice(v'forward_payload);
+    return build_0;
+}
+
+cell $TransferNotification$_store_cell((int, int, slice, slice) v) inline {
+    return $TransferNotification$_store(begin_cell(), v).end_cell();
+}
+
+((int, int, slice, slice)) $TransferNotification$_constructor_query_id_amount_sender_forward_payload(int $query_id, int $amount, slice $sender, slice $forward_payload) inline {
+    return ($query_id, $amount, $sender, $forward_payload);
+}
+
+;;
+;; Type: MintVots
+;; Header: 0xa9d43752
+;; TLB: mint_vots#a9d43752 sender:address amount:coins = MintVots
+;;
+
+builder $MintVots$_store(builder build_0, (slice, int) v) inline {
+    var (v'sender, v'amount) = v;
+    build_0 = store_uint(build_0, 2849257298, 32);
+    build_0 = __tact_store_address(build_0, v'sender);
+    build_0 = build_0.store_coins(v'amount);
+    return build_0;
+}
+
+cell $MintVots$_store_cell((slice, int) v) inline {
+    return $MintVots$_store(begin_cell(), v).end_cell();
+}
+
+((slice, int)) $MintVots$_constructor_amount_sender(int $amount, slice $sender) inline {
+    return ($sender, $amount);
+}
+
+;;
+;; Type: PoolIncome
+;; Header: 0xa4400a99
+;; TLB: pool_income#a4400a99 poolWithdrawnAt:coins = PoolIncome
+;;
+
+(slice, ((int))) $PoolIncome$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2755660441);
+    var v'poolWithdrawnAt = sc_0~load_coins();
+    return (sc_0, (v'poolWithdrawnAt));
+}
+
+;;
+;; Type: Burn
+;; Header: 0x595f07bc
+;; TLB: burn#595f07bc query_id:uint64 amount:coins response_destination:address custom_payload:Maybe ^cell = Burn
+;;
+
+(slice, ((int, int, slice, cell))) $Burn$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1499400124);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'response_destination = sc_0~__tact_load_address();
+    var v'custom_payload = sc_0~load_int(1) ? sc_0~load_ref() : null();
+    return (sc_0, (v'query_id, v'amount, v'response_destination, v'custom_payload));
+}
+
+;;
+;; Type: BurnNotification
+;; Header: 0x7bdd97de
+;; TLB: burn_notification#7bdd97de query_id:uint64 amount:coins sender:address response_destination:address = BurnNotification
+;;
+
+builder $BurnNotification$_store(builder build_0, (int, int, slice, slice) v) inline {
+    var (v'query_id, v'amount, v'sender, v'response_destination) = v;
+    build_0 = store_uint(build_0, 2078119902, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'sender);
+    build_0 = __tact_store_address(build_0, v'response_destination);
+    return build_0;
+}
+
+cell $BurnNotification$_store_cell((int, int, slice, slice) v) inline {
+    return $BurnNotification$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((int, int))) $BurnNotification$_load_bounced(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2078119902);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    return (sc_0, (v'query_id, v'amount));
+}
+
+((int, int, slice, slice)) $BurnNotification$_constructor_query_id_amount_sender_response_destination(int $query_id, int $amount, slice $sender, slice $response_destination) inline {
+    return ($query_id, $amount, $sender, $response_destination);
+}
+
+;;
+;; Type: TokenWallet
+;;
+
+builder $TokenWallet$_store(builder build_0, (int, slice, slice, int, int, int, slice, int, int) v) inline {
+    var (v'balance, v'owner, v'master, v'lastClaimed, v'subscribedUntil, v'jettonsToClaim, v'inviter, v'totalVoted, v'poolWithdrawnAt) = v;
+    build_0 = build_0.store_coins(v'balance);
+    build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = __tact_store_address(build_0, v'master);
+    build_0 = build_0.store_int(v'lastClaimed, 257);
+    var build_1 = begin_cell();
+    build_1 = build_1.store_int(v'subscribedUntil, 257);
+    build_1 = build_1.store_int(v'jettonsToClaim, 257);
+    build_1 = __tact_store_address(build_1, v'inviter);
+    var build_2 = begin_cell();
+    build_2 = build_2.store_int(v'totalVoted, 257);
+    build_2 = build_2.store_int(v'poolWithdrawnAt, 257);
+    build_1 = store_ref(build_1, build_2.end_cell());
+    build_0 = store_ref(build_0, build_1.end_cell());
+    return build_0;
+}
+
+(slice, ((int, slice, slice, int, int, int, slice, int, int))) $TokenWallet$_load(slice sc_0) inline {
+    var v'balance = sc_0~load_coins();
+    var v'owner = sc_0~__tact_load_address();
+    var v'master = sc_0~__tact_load_address();
+    var v'lastClaimed = sc_0~load_int(257);
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'subscribedUntil = sc_1~load_int(257);
+    var v'jettonsToClaim = sc_1~load_int(257);
+    var v'inviter = sc_1~__tact_load_address();
+    slice sc_2 = sc_1~load_ref().begin_parse();
+    var v'totalVoted = sc_2~load_int(257);
+    var v'poolWithdrawnAt = sc_2~load_int(257);
+    return (sc_0, (v'balance, v'owner, v'master, v'lastClaimed, v'subscribedUntil, v'jettonsToClaim, v'inviter, v'totalVoted, v'poolWithdrawnAt));
+}
+
+builder $TokenWallet$init$_store(builder build_0, (slice, slice) v) inline {
+    var (v'owner, v'master) = v;
+    build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = __tact_store_address(build_0, v'master);
+    return build_0;
+}
+
+(slice, ((slice, slice))) $TokenWallet$init$_load(slice sc_0) inline {
+    var v'owner = sc_0~__tact_load_address();
+    var v'master = sc_0~__tact_load_address();
+    return (sc_0, (v'owner, v'master));
+}
+
+(int, slice, slice, int, int, int, slice, int, int) $TokenWallet$_contract_load() impure inline_ref {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$TokenWallet$_load();
+    } else {
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
+        (slice $owner, slice $master) = $sc~$TokenWallet$init$_load();
+        $sc.end_parse();
+        return $TokenWallet$_contract_init($owner, $master);
+    }
+}
+
+() $TokenWallet$_contract_store((int, slice, slice, int, int, int, slice, int, int) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = $TokenWallet$_store(b, v);
+    set_data(b.end_cell());
+}
+
+(cell, cell) $TokenWallet$_init_child(cell sys', slice $owner, slice $master) inline_ref {
+    slice sc' = sys'.begin_parse();
+    cell source = sc'~load_dict();
+    cell contracts = new_dict();
+    
+    ;; Contract Code: TokenWallet
+    cell mine = __tact_dict_get_code(source, 56445);
+    contracts = __tact_dict_set_code(contracts, 56445, mine);
+    
+    ;; Contract Code: MembersPool
+    cell code_49488 = __tact_dict_get_code(source, 49488);
+    contracts = __tact_dict_set_code(contracts, 49488, code_49488);
+    
+    ;; Build cell
+    builder b = begin_cell();
+    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
+    b = b.store_int(false, 1);
+    b = $TokenWallet$init$_store(b, ($owner, $master));
+    return (mine, b.end_cell());
+}
+
+;;
+;; Type: MembersPool
+;;
+
+builder $MembersPool$init$_store(builder build_0, (slice) v) inline {
+    var (v'master) = v;
+    build_0 = __tact_store_address(build_0, v'master);
+    return build_0;
+}
+
+(cell, cell) $MembersPool$_init_child(cell sys', slice $master) inline_ref {
+    slice sc' = sys'.begin_parse();
+    cell source = sc'~load_dict();
+    cell contracts = new_dict();
+    
+    ;; Contract Code: MembersPool
+    cell mine = __tact_dict_get_code(source, 49488);
+    contracts = __tact_dict_set_code(contracts, 49488, mine);
+    
+    ;; Build cell
+    builder b = begin_cell();
+    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
+    b = b.store_int(false, 1);
+    b = $MembersPool$init$_store(b, ($master));
+    return (mine, b.end_cell());
+}

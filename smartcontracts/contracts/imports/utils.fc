@@ -1,0 +1,62 @@
+#include "./stdlib.fc";
+#include "./op-codes.fc";
+
+int min_tons() asm "200000000 PUSHINT"; ;; 0.2 TON
+
+
+int workchain() asm "0 PUSHINT";
+
+() force_chain(slice addr) impure {
+  (int wc, _) = parse_std_addr(addr);
+  throw_unless(333, wc == workchain());
+}
+
+() emit_log(int event_id, cell data, int need_separate_cell) impure inline {
+    ;; 1023 - (4+2+9+256+64+32+2) = 654 bit free
+
+    var msg = begin_cell()
+            .store_uint(12, 4)         ;; ext_out_msg_info$11 src:MsgAddressInt ()
+            .store_uint(1, 2)          ;; addr_extern$01
+            .store_uint(256, 9)        ;; len:(## 9)
+            .store_uint(event_id, 256); ;; external_address:(bits len)
+
+    if (need_separate_cell) {
+        msg = msg.store_uint(1, 64 + 32 + 2) ;; created_lt, created_at, init:Maybe, body:Either
+                .store_ref(data);
+    } else {
+        msg = msg.store_uint(0, 64 + 32 + 2) ;; created_lt, created_at, init:Maybe, body:Either
+                .store_slice(data.begin_parse());
+    }
+
+    send_raw_message(msg.end_cell(), 0);
+}
+
+() send_jettons(slice to_address, int ton_amount, slice usdt_wallet, int amount, int send_mode) impure inline {
+  var msg = begin_cell()
+    .store_uint(0x18, 6)
+    .store_slice(usdt_wallet)
+    .store_coins((min_tons() / 2))
+    .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1);
+  cell msg_body = begin_cell()
+    .store_uint(op::transfer(), 32)
+    .store_uint(0, 64)
+    .store_coins(amount)
+    .store_slice(to_address)
+    .store_slice(to_address)
+    .store_uint(0, 1)
+    .store_coins(0)
+    .store_uint(0, 1)
+    .end_cell();
+  msg = msg.store_ref(msg_body);
+  send_raw_message(msg.end_cell(), send_mode);
+}
+
+
+() send_tons(slice to_address, int amount, int send_mode) impure inline {
+  var msg = begin_cell()
+    .store_uint(0x10, 6) 
+    .store_slice(to_address)
+    .store_coins(amount)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1);
+  send_raw_message(msg.end_cell(), send_mode);
+}

@@ -1,0 +1,196 @@
+;; NFT collection smart contract
+
+;; storage scheme
+;; default#_ royalty_factor:uint16 royalty_base:uint16 royalty_address:MsgAddress = RoyaltyParams;
+;; storage#_ owner_address:MsgAddress next_index:uint64
+;;           ^[collection_content:^Cell common_content:^Cell]
+;;           escrow_code:^Cell
+;;           royalty_params:^RoyaltyParams
+;;           = Storage;
+
+#include "./imports/utils.fc";
+
+
+(slice, slice, int, int, int, cell) load_data() inline {
+  var ds = get_data().begin_parse();
+  return 
+    (ds~load_msg_addr(),;; owner_address
+     ds~load_msg_addr(),;; usdt_master_address
+     ds~load_uint(64),  ;; next escrow index
+     ds~load_coins(),   ;; escrow deploy_price  
+     ds~load_uint(16),  ;; income_fee
+     ds~load_ref()      ;; escrow_item_code
+    );
+}
+
+() save_data(slice owner_address, slice usdt_master, int index, int deploy_price, int income_fee, cell escrow_code) impure inline {
+  set_data(begin_cell()
+    .store_slice(owner_address)
+    .store_slice(usdt_master)
+    .store_uint(index, 64)
+    .store_coins(deploy_price)
+    .store_uint(income_fee,16)
+    .store_ref(escrow_code)
+    .end_cell());
+}
+
+cell calculate_escrow_state_init(int index, cell escrow_code) {
+cell data = begin_cell().store_uint(index, 64).store_slice(my_address()).end_cell();
+  return begin_cell().store_uint(0, 2).store_dict(escrow_code).store_dict(data).store_uint(0, 1).end_cell();
+}
+
+slice calculate_escrow_address(int wc, cell state_init) {
+  return begin_cell().store_uint(4, 3)
+                     .store_int(wc, 8)
+                     .store_uint(cell_hash(state_init), 256)
+         .end_cell()
+        .begin_parse();
+}
+
+() deploy_escrow(int index, cell escrow_code, int price, int income_fee, int ton_or_usdt, slice owner_address, slice usdt_master, slice usdt_wallet) impure {
+  cell state_init = calculate_escrow_state_init(index, escrow_code);
+  slice escrow_address = calculate_escrow_address(workchain(), state_init);
+  var msg = begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(escrow_address)
+            .store_coins(min_tons())
+            .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+            .store_ref(state_init)
+            .store_ref(begin_cell()
+              .store_uint(ton_or_usdt, 1)
+              .store_coins(price)
+              .store_uint(income_fee, 16)
+              .store_slice(owner_address)
+              .store_slice(usdt_master)
+            .end_cell()
+          );
+  send_raw_message(msg.end_cell(), 0); ;;
+  cell data = begin_cell()
+              .store_uint(index, 64)
+              .store_slice(owner_address)
+              .store_slice(escrow_address)
+              .store_coins(price)
+              .store_uint(ton_or_usdt, 1)
+            .end_cell();
+  emit_log(0, data, 0);
+  if(ton_or_usdt == 1) {
+    send_jettons(escrow_address, 0, usdt_wallet, 0, 2); ;; need to activate escrow usdt wallet contract
+  }
+}
+
+() send_aprrove(int escrow_index, int approve, cell escrow_code) impure {
+  cell state_init = calculate_escrow_state_init(escrow_index, escrow_code);
+  slice escrow_address = calculate_escrow_address(workchain(), state_init);
+  var msg = begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(escrow_address)
+            .store_coins(0)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_uint(10, 32) ;; opcode
+            .store_uint(0, 64)
+            .store_uint(approve, 1);
+  send_raw_message(msg.end_cell(), 64); ;; pay transfer fees separately, revert on errors
+}
+
+() recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) { ;; ignore empty messages
+        return ();
+    }
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+    slice sender_address = cs~load_msg_addr();
+    force_chain(sender_address);
+    int op = in_msg_body~load_uint(32);
+    int query_id = in_msg_body~load_uint(64);
+
+    var (owner_address, usdt_master, index, deploy_price, income_fee, escrow_code) = load_data();
+
+    if (op == 0) { ;; deploy new escrow
+      throw_if(error::wrong_amount(), msg_value < deploy_price + min_tons());
+      deploy_escrow(index, escrow_code, in_msg_body~load_coins(), income_fee, in_msg_body~load_uint(1), sender_address, usdt_master, in_msg_body~load_msg_addr());
+      index += 1;
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+
+    throw_unless(error::wrong_sender(), (equal_slices(sender_address, owner_address)));
+    
+    if (op == 1) { ;; change income_fee
+      income_fee = in_msg_body~load_uint(16);
+      throw_if(error::wrong_amount(), income_fee > 499);
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+    if (op == 2) { ;; change deploy_price
+      deploy_price = in_msg_body~load_coins();
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+    if (op == 3) { ;; approve escrow
+      var escrow_index = in_msg_body~load_uint(64); 
+      var approve = in_msg_body~load_uint(1); ;; 0 - approved 1 - not approved
+      send_aprrove(escrow_index, approve, escrow_code);
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+    if (op == 4) { ;; change owner
+      owner_address = in_msg_body~load_msg_addr();
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+    if (op == 5) { ;; admin deploy
+      deploy_escrow(index, escrow_code, in_msg_body~load_coins(), income_fee, in_msg_body~load_uint(1), in_msg_body~load_msg_addr(), usdt_master, in_msg_body~load_msg_addr());
+      index += 1;
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }      
+    if (op == 6) { ;; withdraw by owner
+      send_tons(owner_address, in_msg_body~load_coins(), 0);
+      send_jettons(owner_address, 0, in_msg_body~load_msg_addr(), in_msg_body~load_coins(), 1);
+      save_data(owner_address, usdt_master, index, deploy_price, income_fee, escrow_code);
+      return ();
+    }
+    if (op == 7) { ;; send critical withdraw from escrow 
+      int index = in_msg_body~load_uint(64);
+      int buyer_or_seller = in_msg_body~load_uint(1);
+      int ton_or_usdt = in_msg_body~load_uint(1);
+      int amount = in_msg_body~load_coins();
+      cell state_init = calculate_escrow_state_init(index, escrow_code);
+      slice escrow_address = calculate_escrow_address(workchain(), state_init);
+      var msg = begin_cell()
+                .store_uint(0x18, 6)
+                .store_slice(escrow_address)
+                .store_coins(0)
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .store_uint(42, 32) ;; opcode
+                .store_uint(0, 64)
+                .store_uint(buyer_or_seller, 1)
+                .store_uint(ton_or_usdt, 1)
+                .store_coins(amount);
+      send_raw_message(msg.end_cell(), 64); ;; pay transfer fees separately, revert on errors
+      return ();
+    }
+    throw(0xffff);
+}
+
+;; Get methods
+
+(slice, slice, int, int, int, cell) get_all_data() method_id { 
+    return(load_data());
+}
+
+(slice) get_escrow_address(int index) method_id {
+  var (_, _, _, _, _, escrow_code) = load_data();
+  cell state_init = calculate_escrow_state_init(index, escrow_code);
+  return (calculate_escrow_address(workchain(), state_init));
+}
+
+(int) get_my_balance() method_id {
+  [int balance, _] = get_balance();
+  return balance;
+}
+

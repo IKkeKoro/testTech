@@ -161,7 +161,7 @@ slice calculate_escrow_address(int wc, cell state_init) {
                 .store_uint(buyer_or_seller, 1)
                 .store_uint(ton_or_usdt, 1)
                 .store_coins(amount);
-      send_raw_message(msg.end_cell(), 64); ;; pay transfer fees separately, revert on errors
+      send_raw_message(msg.end_cell(), 64); 
       return ();
     }
     throw(0xffff);

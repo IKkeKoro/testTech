@@ -858,7 +858,92 @@ describe('Escrow-item', () => {
             const newBalance = await buyer.getBalance()
             expect(newBalance).toBeGreaterThan(oldBalance + toNano(2.9))
         });
+        it('should send usdt back in critical cases to seller', async () => {
+            const nextEscrow = await escrow.getEscrowAddress((await escrow.getData()).index)
+            await minter.sendMint(deployer.getSender(), {
+                toAddress: nextEscrow.escrowAddress,
+                jettonAmount: toNano(1337),
+                amount: toNano(2),
+                queryId: 0,
+                value: toNano(2.5)
+            });
+            const deployerUsdtWallet = await minter.getWalletAddress(escrow.address)
+            await escrow.sendUserDeploy(seller.getSender(), {
+                price: toNano(20),
+                tonOrUsdt: 1,
+                value: toNano('10.5'),
+                deployerUsdtWallet: deployerUsdtWallet
+            });
+            const escrowNewItem = blockchain.openContract(
+                EscrowItem.createFromAddress(nextEscrow.escrowAddress)
+            );
+            const result = await escrowNewItem.sendCancelBySeller(seller.getSender(), {
+                value: toNano('10.5')
+            });
+            expect(result.transactions).toHaveTransaction({
+                from: seller.address,
+                success: true
+            });
+            expect(2n).toEqual((await escrowNewItem.getData()).status)
+            const oldBalance = (await sellerUsdtWallet.getData()).value
+            const result1 = await escrow.sendEscrowWithdraw(deployer.getSender(), {
+                value: toNano('10.5'),
+                index: (await escrowNewItem.getData()).index,
+                tonOrUsdt: 1,
+                buyerOrSender: 1, // seller*
+                amount: toNano(5)
+            });
+
+            const newBalance = (await sellerUsdtWallet.getData()).value
+            expect(newBalance).toEqual(oldBalance + toNano(5))
+        });
+        it('should send usdt back in critical cases to buyer', async () => {
+            const nextEscrow = await escrow.getEscrowAddress((await escrow.getData()).index)
+            await minter.sendMint(deployer.getSender(), {
+                toAddress: nextEscrow.escrowAddress,
+                jettonAmount: toNano(1337),
+                amount: toNano(2),
+                queryId: 0,
+                value: toNano(2.5)
+            });
+            const deployerUsdtWallet = await minter.getWalletAddress(escrow.address)
+            await escrow.sendUserDeploy(seller.getSender(), {
+                price: toNano(20),
+                tonOrUsdt: 1,
+                value: toNano('10.5'),
+                deployerUsdtWallet: deployerUsdtWallet
+            });
+            const escrowNewItem = blockchain.openContract(
+                EscrowItem.createFromAddress(nextEscrow.escrowAddress)
+            );
+            const result = await buyerUSDTWallet.sendTransfer(buyer.getSender(), {
+                value: toNano(30),
+                toAddress: nextEscrow.escrowAddress,
+                queryId: 0,
+                fwdAmount: 100n,
+                jettonAmount: toNano(40)
+            })
+            expect(1n).toEqual((await escrowNewItem.getData()).status)
+            const approveResult = await escrow.sendApprove(deployer.getSender(), {
+                approve: 0,
+                index: (await escrowNewItem.getData()).index,
+                value: toNano(2)
+            })
+            const oldBuyerUSDTBalance = (await buyerUSDTWallet.getData()).value
+            expect(2n).toEqual((await escrowNewItem.getData()).status)
+            const result1 = await escrow.sendEscrowWithdraw(deployer.getSender(), {
+                value: toNano('10.5'),
+                index: (await escrowNewItem.getData()).index,
+                tonOrUsdt: 1,
+                buyerOrSender: 0, // buyer
+                amount: toNano(5)
+            });
+
+            const newBuyerUSDTBalance = (await buyerUSDTWallet.getData()).value
+            expect(newBuyerUSDTBalance).toEqual(oldBuyerUSDTBalance + toNano(5))
+        });
     })
+
     describe('Emit changes ', () => { 
         it('should emit on ton payment', async () => {
             const price = (await escrowItem.getData()).price

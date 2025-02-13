@@ -54,7 +54,7 @@ export function CreateEscrow(data: any) {
                                     mr="2"
                                     rounded={"16px"}
                                 />
-                            <Switch border={'20px'} checked={checked} onCheckedChange={(e: any) => {setChecked(e.checked)}}>{checked ? "Usdt" : "Tons"}</Switch>    
+                            <Switch border={'20px'} checked={checked} onCheckedChange={(e: any) => {setChecked(e.checked)}}>{checked ? "Tons" : "Usdt"}</Switch>    
                         </Box>
      
                         <Box display="flex" justifyContent="space-between">

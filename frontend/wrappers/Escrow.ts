@@ -1,5 +1,5 @@
 import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode, TupleItemInt } from 'ton-core';
-import {deployerUsdtWallet} from '../src/hooks/addresses'
+import {deployerUsdtWallet, mainnetUsdtDeployerWallet} from '../src/hooks/addresses'
 export type EscrowConfig = {
     owner: Address;
     usdtMaster: Address;
@@ -62,7 +62,7 @@ export class Escrow implements Contract {
                 .storeUint(opts.queryID ?? 0, 64)
                 .storeCoins(opts.price)
                 .storeUint(opts.tonOrUsdt, 1)
-                .storeAddress(Address.parse(deployerUsdtWallet))
+                .storeAddress(Address.parse(mainnetUsdtDeployerWallet))
                 .endCell(),
         });
     }
@@ -169,7 +169,7 @@ export class Escrow implements Contract {
                 .storeCoins(opts.price)
                 .storeUint(opts.tonOrUsdt, 1)
                 .storeAddress(opts.seller)
-                .storeAddress(Address.parse(deployerUsdtWallet))
+                .storeAddress(Address.parse(mainnetUsdtDeployerWallet))
                 .endCell(),
         });
     }

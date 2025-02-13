@@ -6,7 +6,7 @@ import { deployer } from './const/addresses';
 
 export async function run(provider: NetworkProvider) {
     const escrowDeployer = provider.open(Escrow.createFromAddress(deployer));
-    const index = 0n 
+    const index = 3n 
     const itemAddress: Address = (await escrowDeployer.getEscrowAddress(index)).escrowAddress
     const escrowItem = provider.open(EscrowItem.createFromAddress(itemAddress))
     console.log(await escrowItem.getData())

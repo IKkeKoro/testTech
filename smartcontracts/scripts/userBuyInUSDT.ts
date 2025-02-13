@@ -8,7 +8,7 @@ import { deployer, usdtMaster } from './const/addresses';
 
 export async function run(provider: NetworkProvider) {
     const escrowDeployer = provider.open(Escrow.createFromAddress(deployer));
-    const index = 0n 
+    const index = 4n 
     const itemAddress: Address = (await escrowDeployer.getEscrowAddress(index)).escrowAddress
     const escrowItem = provider.open(EscrowItem.createFromAddress(itemAddress))
     const usdtMinter = provider.open(JettonMinter.createFromAddress(usdtMaster))
@@ -17,7 +17,7 @@ export async function run(provider: NetworkProvider) {
     const jettonWallet = provider.open(JettonWallet.createFromAddress(userWallet));
 
     await jettonWallet.sendTransfer(provider.sender(), {
-        value: toNano('0.3'),
+        value: toNano('0.13'),
         fwdAmount: toNano('0.01'),
         jettonAmount: price,
         toAddress: itemAddress,

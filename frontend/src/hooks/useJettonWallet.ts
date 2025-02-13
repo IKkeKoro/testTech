@@ -34,7 +34,7 @@ export function useJettonContract() {
         transfer: (amount: bigint, to: string) => {
             jettonWalletContract?.sendTransfer(sender,
                 {
-                    value: toNano("0.1"),
+                    value: toNano("0.04"),
                     toAddress: Address.parse(to),
                     queryId: Date.now(),
                     fwdAmount: toNano("0.001"),

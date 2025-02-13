@@ -203,6 +203,7 @@
       } else {
         send_jettons(to_address , 0, usdt_wallet, amount, 1);
       }
+      return();
     }
     throw(0xffff);
 }

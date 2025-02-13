@@ -26,7 +26,7 @@ export function App() {
   return (
     <Router>
     <Box bg="rgba(255, 255, 255, 0.5)" color={color} bgImage={bgGradient} minH="100vh" p="20px" transition="background-color 0.3s ease, color 0.3s ease" style={{ backdropFilter: "blur(100px)" }}>
-    {data === null ? <Flex justify={'center'}>Loading...</Flex> : 
+
       <Center >
           <Flex direction="column" gap="16px">
           <Flex justify="center" gap="10px">
@@ -48,7 +48,7 @@ export function App() {
               <TonConnectButton  />
               
             </Flex>
-
+            {data === null ? <Flex justify={'center'}>Loading...</Flex> : 
             <Routes>
               <Route path={"/"} element={
                 <Flex direction="column" align="center" spaceY={4}>
@@ -57,10 +57,10 @@ export function App() {
               } />
               <Route path={`/escrow/:id`} element={<DetailedEscrow {...data}/>} />
               <Route path={`/create/`} element={<CreateEscrow {...data}/>} />
-            </Routes>
+            </Routes>}
           </Flex>
         
-      </Center>}
+      </Center>
     </Box>
     </Router>
   );

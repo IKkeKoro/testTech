@@ -7,7 +7,7 @@ import { useTonConnect } from './useTonConnect';
 import { useAsyncInitialize } from './useAsyncInitialize';
 import { deployer } from './addresses';
 import { TonClient } from 'ton';
-
+import { useTonClient } from './useTonClient';
 
 export type EscrowData ={
     index: bigint;
@@ -35,11 +35,12 @@ const emptyData: EscrowData = {
 }
 export function useEscrow(address: Address | null) {
     const client = new TonClient({
-        endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
         apiKey: process.env.VITE_API
     })
 
     const {wallet, sender} = useTonConnect()
+
     const sleep = (time: number) =>
         new Promise((resolve) => setTimeout(resolve, time));
 

@@ -61,7 +61,7 @@ export type ProjectData =  {
 export function DetailedEscrow(data: any) {
 
   const { id } = useParams<{ id: string }>();
-  const {escrowAddress,contractData, sendPayInTons, sendApproveByGuarantor, sendApproveByUser}= useEscrow(data.escrows[id!].address);
+  const {escrowAddress,contractData, sendPayInTons, sendApproveByUser}= useEscrow(data.escrows[id!].address);
   const {transfer} = useJettonContract()
   const escrowIdEvent = data.escrows[id!]
   return (
@@ -86,7 +86,7 @@ export function DetailedEscrow(data: any) {
             <Flex mt="2" justify="space-between">
             <Text fontWeight="bold" color="gray.600">Seller: </Text>
             <Link color={"blue.400"}   
-              href={`https://testnet.tonviewer.com/${escrowIdEvent.seller!.toString()}`}>
+              href={`https://tonviewer.com/${escrowIdEvent.seller!.toString()}`}>
               <Text color={"blue.400"} ml="auto">{`${escrowIdEvent.seller!.toString().slice(0, 4)}...${escrowIdEvent.seller!.toString().slice(-4)}`}</Text>
             </Link>
             </Flex>
@@ -95,7 +95,7 @@ export function DetailedEscrow(data: any) {
             
             {contractData?.buyerAddress != undefined  ? 
               <Link color={"blue.400"}
-                href={`https://testnet.tonviewer.com/${contractData?.buyerAddress?.toString()}`}>
+                href={`https://tonviewer.com/${contractData?.buyerAddress?.toString()}`}>
                 <Text color={"blue.400"} ml="auto">{`${contractData?.buyerAddress?.toString().slice(0, 4)}...${contractData?.buyerAddress?.toString().slice(-4)}`}</Text>
               </Link> : 
               <Text color={"gray.400"} ml="auto">{ 'no one'}</Text>
@@ -105,7 +105,7 @@ export function DetailedEscrow(data: any) {
             <Flex mt="2" justify="space-between">
             <Text fontWeight="bold" color="gray.600">Contract: </Text>
             <Link color={"blue.400"}   
-              href={`https://testnet.tonviewer.com/${escrowIdEvent?.address?.toString()}`}>
+              href={`https://tonviewer.com/${escrowIdEvent?.address?.toString()}`}>
               <Text color={"blue.400"} ml="auto">{`${escrowIdEvent?.address?.toString().slice(0, 4)}...${escrowIdEvent?.address?.toString().slice(-4)}`}</Text>
             </Link>
             </Flex>

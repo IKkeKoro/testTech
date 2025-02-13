@@ -8,14 +8,14 @@ export async function run(provider: NetworkProvider) {
     const escrowDeployer = provider.open(Escrow.createFromAddress(deployer));
     const usdtMinter = provider.open(JettonMinter.createFromAddress(usdtMaster))
     const deployerWallet = await usdtMinter.getWalletAddress(deployer)
-    const price = toNano(0.2)
+    const price = toNano(10)
     const deployPrice = (await escrowDeployer.getData()).price
     await escrowDeployer.sendUserDeploy(
         provider.sender(),
         {
             value: deployPrice + toNano('0.3'),
             price: price,
-            tonOrUsdt: 0, // 0 - ton
+            tonOrUsdt: 1, // 0 - ton
             deployerUsdtWallet: deployerWallet
         }
     );

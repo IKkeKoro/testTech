@@ -66,14 +66,14 @@ export function EscrowCard(props: ProjectCardProps) {
             <Flex mt="2" justify="space-between">
               <Text fontWeight="bold" color="gray.600">Seller: </Text>
               <Link color={"blue.400"}   
-                href={`https://testnet.tonviewer.com/${data.seller}`}>
+                href={`https://tonviewer.com/${data.seller}`}>
                 <Text color={"blue.400"} ml="auto">{`${data!.seller.toString().slice(0, 4)}...${data!.seller.toString().slice(-4)}`}</Text>
               </Link>
             </Flex>
             <Flex mt="2" justify="space-between">
               <Text fontWeight="bold" color="gray.600">Contract: </Text>
               <Link color={"blue.400"}   
-                href={`https://testnet.tonviewer.com/${data.address}`}>
+                href={`https://tonviewer.com/${data.address}`}>
                 <Text color={"blue.400"} ml="auto">{`${data!.address.toString().slice(0, 4)}...${data!.address.toString().slice(-4)}`}</Text>
               </Link>
             </Flex>

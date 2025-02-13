@@ -1,5 +1,6 @@
 import { TonClient } from "ton";
 import { Address } from "ton-core";
+import { mainnetDeployer } from "./addresses";
 
 // Define the emitted message formats
 const sleep = (time: number) =>
@@ -13,12 +14,13 @@ export type EscrowData = {
     tonOrUsdt: number;
 }
 const client = new TonClient({
-    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    endpoint: "https://toncenter.com/api/v2/jsonRPC",
     apiKey: process.env.VITE_API
 })
 let allEscrow: EscrowData[] = [];
 export async function useEvent() {
-    const transactions = await client.getTransactions(Address.parse("EQAJKiX_kv1TvWFvj-aytquW3flKD5M0NqWpA-WeR7LicJyy"), { limit: 300 });
+    
+    const transactions = await client.getTransactions(Address.parse(mainnetDeployer), { limit: 300 });
     for (const tx of transactions) {
         if(tx.outMessages.get(1)?.body) {
             const tex =  tx.outMessages.get(1)?.body!.beginParse()
@@ -33,6 +35,7 @@ export async function useEvent() {
         }
     }
     allEscrow.reverse();
+    console.log(allEscrow)
     if(allEscrow.length == 0) {
         await sleep(100000);  
         useEvent()

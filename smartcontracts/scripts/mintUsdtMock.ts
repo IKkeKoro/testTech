@@ -11,13 +11,13 @@ export async function run(provider: NetworkProvider) {
     // For tests mint available to anyone
     const usdtMinter = provider.open(JettonMinter.createFromAddress(usdtMaster))
     const address = provider.sender().address!
-    const amount = toNano(10)
+    const amount = toNano(100)
     await usdtMinter.sendMint(provider.sender(), {
         toAddress: deployer,
         jettonAmount: amount,
         amount: toNano(0.01),
         queryId: 0,
-        value: toNano(0.1)
+        value: toNano('0.07')
     });
 
 }

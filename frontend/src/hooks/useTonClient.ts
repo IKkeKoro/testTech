@@ -2,6 +2,7 @@
 import { TonClient } from "ton";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonConnect } from "./useTonConnect";
+import { getHttpEndpoint } from "@orbs-network/ton-access";
 export function useTonClient() {
     const {network, wallet, sender} = useTonConnect()
 
@@ -10,13 +11,13 @@ export function useTonClient() {
             if(!network) return;
 
             return new TonClient({
-                endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+                endpoint: "https://toncenter.com/api/v2/jsonRPC",
                 apiKey: process.env.VITE_API
                 // endpoint: await getHttpEndpoint({
-                //     network: network === CHAIN.MAINNET ? "mainnet" : "testnet"
+                //     network: "testnet"
                 // })
             })
-        }, [network]),
+        }, [network]),  
         network: network,
         sender: sender,
         wallet: wallet

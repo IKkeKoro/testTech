@@ -1,6 +1,8 @@
 # twa-template
 > Starter template for a new TWA interacting with the TON blockchain 
 
+!! add .env file with VITE_API = "your api"
+
 # Overview
 The project is highly-opinionated, and there are many other alternate routes it could have taken. Some examples:
 - Supports Ton Connect 2 wallets

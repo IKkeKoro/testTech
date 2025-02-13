@@ -3,7 +3,7 @@ import {Escrow} from '../../wrappers/Escrow'
 import { useTonClient } from './useTonClient';
 import { useTonConnect } from './useTonConnect';
 import { useAsyncInitialize } from './useAsyncInitialize';
-import { deployer } from './addresses';
+import { deployer, mainnetDeployer } from './addresses';
 
 export type EscrowData ={
     index: bigint;
@@ -26,7 +26,7 @@ export function useEscrowDeployer() {
 
     const escrowDeployer = useAsyncInitialize(async()=>{
         if(!client || !wallet) return;
-        const contract = Escrow.createFromAddress(Address.parse(deployer))        
+        const contract = Escrow.createFromAddress(Address.parse(mainnetDeployer))        
         return client.open(contract) as OpenedContract<Escrow>
     }, [client, wallet])
 
@@ -34,9 +34,6 @@ export function useEscrowDeployer() {
     return {
         sendDeployEscrow: (price: string, tonOrUsdt: number,) => {
             let value = toNano('0.3')
-            if (tonOrUsdt == 0) {
-                value += toNano(price)
-            }
             escrowDeployer?.sendUserDeploy(sender, {
                 price: toNano(price),
                 tonOrUsdt: tonOrUsdt,
